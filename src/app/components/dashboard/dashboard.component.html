@@ -1,0 +1,226 @@
+<div class="spinner-overlay"  *ngIf="_show_spinner" >
+    <div class="spinner-container">
+      <span class="loader"></span>
+    </div>
+</div>
+
+<!-- <span class="text-info p-2" > Version 1.0.2 </span> -->
+
+<div class="module-work mb-2">
+    <app-nav-side></app-nav-side>
+</div>
+
+<div class="module-work">
+    <div class="form-mod">
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="fs-3" > Registro de compra </span>
+            <div style="width: 18px; height: 18px; border-radius: 100%; background-color: blueviolet;" (click)="_formulario_on = !_formulario_on" ></div>
+        </div>
+        <hr>
+        <form [formGroup]="pedidosForm" class="mb-2" (ngSubmit)="onSubmit()" *ngIf="_formulario_on" >
+            <div class="d-flex flex-column mt-2">
+                <label for="tienda">Nombre de aplicación de compras</label>
+                <select class="form-control" formControlName="tienda" id="tienda" (change)="validarEmpty()">
+                  <option *ngFor="let tienda of tiendas" [value]="tienda.nombre">{{ tienda.nombre }}</option>
+                </select>
+            </div>
+            <div class="d-flex flex-column mt-2" >
+                <label for="">
+                    Nombre Usuario
+                </label>
+                <input type="text" 
+                       class="form-control"
+                       formControlName="usuario"
+                       #usuario
+                       id="usuario"
+                       >
+            </div>
+            <div class="d-flex flex-column mt-2" >
+                <label for="">
+                    Producto
+                </label>
+                <input type="text" 
+                       class="form-control"
+                       formControlName="producto"
+                       #producto
+                       id="producto">
+            </div>
+            <div class="d-flex justify-content-between ">
+                <div class="d-flex flex-column mt-2" >
+                    <label for="" title="Precio de venta al público">
+                        Precio público:
+                    </label>
+                    <input type="number" 
+                           style="width: 125px;"
+                           min="0"
+                           formControlName="precio"
+                           class="form-control"
+                           #precio
+                           id="precio">
+                </div>
+                <div class="d-flex flex-column mt-2" >
+                    <label for="">
+                        Precio app Shein:
+                    </label>
+                    <input type="number"
+                           min="0"
+                           style="width: 125px;"
+                           formControlName="precioShein"
+                           class="form-control"
+                           #precioShein
+                           id="precioShein">
+                </div>
+            </div>
+            <button type="submit" class="w-100 d-flex align-items-center justify-content-center p-1 btn btn-warning mt-2 ">
+                <mat-icon>add</mat-icon> Crear pedido
+            </button>
+        </form>
+    </div>    
+
+</div>
+
+<div class="module-work mt-3" style="background-color: yellowgreen; ">
+    <div class="d-flex justify-content-between flex-column " title="Ganancia por compra">
+        <small> Ganancia por compra: </small> <span class="w-100 mt-2 d-flex justify-content-end fs-1"> <strong> $ {{ ganancia | number : '1.2-2' }} </strong> </span>
+    </div>
+</div>
+
+<div class="module-work mt-3">
+    
+    <div class="form-mod">
+        <div>
+            <span class="fs-3">
+                Compras efectuadas
+            </span>
+        </div>
+        <hr>
+        <div class="table-responsive" >
+            <table class="table table-striped table-bordered table-warning">
+                <thead class="bg-dark text-light" >
+                    <th style="background-color: black !important; " class="p-1"></th>
+                    <th style="background-color: black !important; " class="p-1">Usuario</th>
+                    <th style="background-color: black !important; " class="p-1">Producto</th>
+                    <!-- <th class="p-1">Precio S.</th> -->
+                    <th style="background-color: black !important; " class="p-1">Precio P.</th>
+                </thead>
+                <tbody *ngFor="let compra of listaComras; let i = index" >
+                    <tr>
+                        <td (click)="eliminarProduto(i)">
+                            <div>
+                                <mat-icon>delete</mat-icon>
+                            </div>    
+                        </td>
+                        <td>{{ compra.usuario }} </td>
+                        <td>{{ compra.producto }} </td>
+                        <!-- <td>{{ compra.precioShein | number : '1.2-2' }} </td> -->
+                        <td>{{ compra.precio | number : '1.2-2' }} </td>
+                    </tr>
+                </tbody>
+                <tbody class="table-success">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td> Total precio: </td>
+                        <td>$ {{totalPrecio | number : '1.2-2'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn btn-danger d-flex align-items-center w-100 justify-content-center" (click)="limpiarTablaCompras()" >
+                <mat-icon>delete</mat-icon> Limpiar tabla de compras
+            </button>
+            
+        </div>
+    </div>    
+    
+</div>
+<div class="module-work mt-3 mb-3">
+    <div class="table-responsive-lg">
+    <span  class="d-flex align-items-center m-1 justify-content-between">
+        <span class="d-flex align-items-center">
+            <mat-icon>receipt</mat-icon> Balance General:
+            <span class="badge rounded-pill bg-danger">
+                {{cantidadListaCompras}}
+            </span>
+        </span>
+        <span class="d-flex">
+            <div class="btn-icon m-1 shadow-sm" (click)="cargarDatosDesdeIndexedDB()">
+                <mat-icon>refresh</mat-icon>
+            </div>
+            <div class="btn-icon m-1 shadow-sm" (click)="_formulario_balance = !_formulario_balance" >
+                <mat-icon>search</mat-icon>
+            </div>
+        </span>
+    </span>
+    <table class="table table-secondary table-bordered table-striped align-middle">
+        <thead class="align-middle bg-dark">
+          <tr>
+            <th></th>
+            <th>Fecha Creación</th>
+            <th>Tienda</th>
+            <th>Usuario</th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Precio Shein</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let modelo of listaComrasBalance; let i = index;">
+              <td (click)="eliminarDatosBalance(i, modelo.key)" ><mat-icon>delete</mat-icon></td>
+              <td>{{ modelo.fechaCrea | date: 'short' }}</td>
+              <td>{{ modelo.tienda }}</td>
+              <td>{{ modelo.usuario }}</td>
+              <td>{{ modelo.key }} - {{ modelo.producto }}</td>
+              <td style="text-align: right;">{{ modelo.precio | number : '1.2-2' }}</td>
+              <td style="text-align: right;">{{ modelo.precioShein | number : '1.2-2'}}</td>
+            </tr>
+          </tbody>
+        <tbody class="table-primary">
+            <tr >
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: right;"> <strong> {{totalPrecioBalancePunlico | number : '1.2-2' }} </strong> </td>
+                <td style="text-align: right;"> <strong> {{totalPrecioBalanceAppShein | number : '1.2-2' }} </strong> </td>
+              </tr>
+        </tbody>
+        <tbody class="table-success">
+            <tr >
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: right;">  </td>
+                <td> <strong> Ganancias: </strong> </td>
+                <td style="text-align: right;"> <strong> {{ totalPrecioBalancePunlico - totalPrecioBalanceAppShein | number : '1.2-2' }} </strong> </td>
+              </tr>
+        </tbody>
+      </table>
+    </div>
+
+</div>
+
+<div class="formu-display animate__animated animate_bounce d-flex align-items-center" *ngIf="_formulario_balance" >
+    <form [formGroup]="filtroBalance" class="mb-2 w-100">
+        
+            <label class="d-flex align-items-center mb-2">
+                <mat-icon>search</mat-icon> Filtrar:
+            </label>
+            <div class="d-flex justify-content-between">
+                <input type="text" class="form-control w-75"
+                       formControlName="filtro"
+                       #filtro
+                       id="filtro">
+                <div class="d-flex">
+                    <div class="btn-icon m-1" (click)="onSubmitFiltrar()" >
+                        <mat-icon>done</mat-icon>    
+                    </div>
+                    <div class="btn-icon m-1" style="background-color: red !important;" (click)="_formulario_balance = false" >
+                        <mat-icon>cancel</mat-icon>    
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
