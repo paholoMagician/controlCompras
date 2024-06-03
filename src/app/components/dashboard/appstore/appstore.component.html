@@ -1,0 +1,84 @@
+<div class="spinner-overlay"  *ngIf="_show_spinner" >
+    <div class="spinner-container">
+      <span class="loader"></span>
+    </div>
+</div>
+
+<div class="module-work mb-2">
+
+    <div class="d-flex justify-content-end align-items-center " >
+        <span class="fs-4" >
+            <mat-icon>add_business</mat-icon>
+        </span>
+        <span class="fs-4">
+            <strong> Agregar App Store </strong> 
+        </span>
+    </div>
+    <hr>
+    <form [formGroup]="appStoreForm" class="mb-2" (ngSubmit)="onSubmit()" *ngIf="_formulario_on" >
+    
+        <div class="d-flex flex-column mt-2" >
+            <label for="nombre">
+                Nombre de la App Store:
+            </label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="nombreAppStore"
+                   #nombreAppStore
+                   id="nombreAppStore">
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="observacion">
+                Observación:
+            </label>
+            <input type="text"
+                   class="form-control"
+                   formControlName="observacion"
+                   #observacion
+                   id="observacion">
+        </div>
+        <button class="btn btn-warning w-100 d-flex align-items-center justify-content-center mt-2 " type="submit">
+            <mat-icon>
+                {{icon_button}}
+            </mat-icon>
+            <span>
+                {{ action_button }}
+            </span>
+        </button>
+    </form>
+
+</div>
+
+<div class="module-work mb-2">
+
+    <div class="fs-4" > 
+        <strong> App Store creadas ( {{ listaAppStore.length }} ) </strong> 
+    </div>
+    <hr>
+    <div class="table-responsive-sm p-1 ">
+        <table class="table table-dark align-middle table-bordered table-striped shadow-sm" >
+            <thead class="bg-warning text-dark align-middle ">
+                <th></th>
+                <th>Nombre</th>
+                <th>observación</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let shop of listaAppStore; let i = index;">
+                    <td>
+                        <div class="d-flex">
+                            <div (click)="catchData(shop)">
+                                <mat-icon>edit</mat-icon>
+                            </div>
+                            <div (click)="eliminarAppStore(shop.id, i)">
+                                <mat-icon>delete</mat-icon>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ shop.nombreAppStore }}</td>
+                    <td>{{ shop.observacion }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

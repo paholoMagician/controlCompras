@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Environments } from '../../environments/environments';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +27,43 @@ export class UserService {
 
   }
 
+  guardarUsuario( model: any [] ) {
+    return this.http.post( this.url.apiurl() + 'Usuario/guardarUsuarios', model )
+  }
+
+  actualizarUsuario( id:number, model: any [] ) {
+    return this.http.put( this.url.apiurl() + 'Usuario/actualizarUsuarios/' + id, model )
+  }
+
+  eliminarUsuario(estado: number, id: number, idcliente: number): Observable<any> {
+    const apiUrl = this.url.apiurl() + 'Usuario/actualizarUsuarioEstado/' + estado + '/' + id + '/' + idcliente;
+
+    const headers = new HttpHeaders({
+      'ngrok-skip-browser-warning': 'true'
+    });
+
+    return this.http.get(apiUrl, { headers });
+  }
+
   cerrarSesion() {
 
     sessionStorage.removeItem('nombre');
     sessionStorage.removeItem('t');
     sessionStorage.removeItem('cedula');
     sessionStorage.removeItem('email');
+    sessionStorage.removeItem('index');
     this.route.navigate(['login'])
 
+  }
+
+  obtenerUsuarios(id: number): Observable<any> {
+    const apiUrl = this.url.apiurl() + 'Usuario/obtenerUsuario/' + id;
+
+    const headers = new HttpHeaders({
+      'ngrok-skip-browser-warning': 'true'
+    });
+
+    return this.http.get(apiUrl, { headers });
   }
 
 }
