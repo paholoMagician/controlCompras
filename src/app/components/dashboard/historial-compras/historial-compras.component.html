@@ -1,0 +1,84 @@
+<div class="spinner-overlay"  *ngIf="_show_spinner">
+    <div class="spinner-container">
+      <span class="loader"></span>
+    </div>
+</div>
+
+<div class="module-work mb-2">
+
+    <div class="d-flex justify-content-between align-items-center " >
+        <div class="mb-2 d-flex w-50">
+            <input class=" w-100 shadow-sm form-control rounded-pill" 
+            fxFlex="auto" type="text"
+            [(ngModel)]="filterInitit"
+            (keyup)="filterHistory()" 
+            #input placeholder="Búsqueda ...">
+        </div>
+        <div class="d-flex align-items-center">
+            <span class="fs-5" >
+                <mat-icon>receipt_long</mat-icon>
+            </span>
+            <span class="fs-5">
+                <strong> Historial ( {{ listaComras.length }} ) </strong> 
+            </span>
+        </div>
+    </div>
+    <hr> 
+    <div class="d-flex justify-content-end align-items-center">
+        <div class="text-secondary w-75">
+            <div class="d-flex flex-column">
+                <small class="d-flex justify-content-between p-1" style="border: dashed 1px gray;"> <span> P.V.P.:</span> <strong class="text-primary">$ {{ pvptotal | number : '1.2-2' }}</strong> </small>
+                <small class="d-flex justify-content-between p-1" style="border: dashed 1px gray;"> <span> P.V.T.:</span> <strong class="text-primary">$ {{ pvttotal | number : '1.2-2' }}</strong> </small>
+                <small class="d-flex justify-content-between p-1" style="border: dashed 1px gray;"> <span> Total gan.: </span><strong class="text-success fs-6" > $ {{ pvptotal - pvttotal | number : '1.2-2' }}</strong> </small>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive" style="height: 75vh; overflow-y: auto;">
+        <table class="table table-bordered table table-dark table-striped align-middle" >
+            <thead class="bg-primary">
+                <th class="p-1"></th>
+                <th class="p-1">Usuario</th>
+                <th class="p-1">Producto</th>
+                <th class="p-1">Tienda</th>
+                <th class="p-1">Email</th>
+                <th class="p-1">P.V.P.</th>
+                <th class="p-1">P.V.T</th>
+                <th class="p-1">Telefono</th>
+                <th class="p-1">direccion</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let prod of listaComras" >
+                    <td>
+                        <div (click)="showImage( prod.urlimagen, prod.idcliente )" >
+                            <mat-icon>image</mat-icon>
+                        </div>
+                    </td>
+                    <td>
+                        {{ prod.nombre }}
+                    </td>
+                    <td>
+                        {{prod.nombreAppStore}}
+                    </td>
+                    <td>
+                        {{prod.nombreProducto}}
+                    </td>
+                    <td>
+                        {{prod.email}}
+                    </td>
+                    <td>
+                        {{prod.precioacliente}}
+                    </td>
+                    <td>
+                        {{prod.preciodeapp}}
+                    </td>
+                    <td>
+                        {{prod.telefono}}
+                    </td>
+                    <td>
+                        {{prod.direccion}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

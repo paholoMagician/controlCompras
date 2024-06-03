@@ -1,0 +1,10 @@
+#log {
+    width: 400px;
+    height: auto;
+}
+
+@media screen and ( max-width: '400px' ) {
+    #log {
+        width: 100%;
+    }
+}

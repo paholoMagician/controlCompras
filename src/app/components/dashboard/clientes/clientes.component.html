@@ -1,0 +1,185 @@
+<div class="spinner-overlay"  *ngIf="_show_spinner" >
+    <div class="spinner-container">
+      <span class="loader"></span>
+    </div>
+</div>
+
+<div class="module-work mb-2">
+
+    <div class="d-flex justify-content-end align-items-center " >
+        <span class="fs-4" >
+            <mat-icon>person_add</mat-icon>
+        </span>
+        <span class="fs-4">
+            <strong> Agregar clientes </strong> 
+        </span>
+    </div>
+    <hr>
+    <form [formGroup]="clientesForm" class="mb-2" (ngSubmit)="onSubmit()" *ngIf="_formulario_on" >
+    
+        <div class="d-flex flex-column mt-2" >
+            <label for="nombre">
+                Nombre Usuario:
+            </label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="nombre"
+                   #nombre
+                   id="nombre"
+                   >
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="cedula">
+                Cédula de identidad:
+            </label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="cedula"
+                   #cedula
+                   id="cedula"
+                   >
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="email">
+                Email:
+            </label>
+            <input type="email" 
+                   class="form-control"
+                   formControlName="email"
+                   #email
+                   id="email"
+                   >
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="email">
+                Teléfono:
+            </label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="telefono"
+                   #telefono
+                   id="telefono"
+                   >
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="password">
+                Contraseña:
+            </label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="password"
+                   #password
+                   id="password"
+                   >
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="direccion">
+                Dirección:
+            </label>
+            <input type="text" 
+                   class="form-control"
+                   formControlName="direccion"
+                   #direccion
+                   id="direccion"
+                   >
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="edad">
+                Edad:
+            </label>
+            <input type="number" 
+                   class="form-control"
+                   formControlName="edad"
+                   #edad
+                   id="edad"
+                   >
+        </div>
+        <button class="btn btn-warning w-100 d-flex align-items-center justify-content-center mt-2 "
+                type="submit" >
+                <mat-icon>
+                    {{icon_button}}
+                </mat-icon>
+                <span>
+                    {{ action_button }}
+                </span>
+        </button>
+    </form>
+
+</div>
+
+<div class="module-work mb-2">
+
+    <div class="fs-4" > 
+        <strong> Usuarios creados ( {{ listaUsuarios.length }} ) </strong> 
+    </div>
+    <hr>
+    <div class="table-responsive-sm p-1 ">
+        <table class="table table-dark align-middle table-bordered table-striped shadow-sm" >
+            <thead class="bg-warning text-dark align-middle ">
+                <th>
+                    
+                </th>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Edad
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Teléfono
+                </th>
+                <th>
+                    Cedula
+                </th>
+                <th>
+                    Direccion
+                </th>
+                <th>
+                    Contraseña
+                </th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of listaUsuarios">
+                    <td>
+                        <div class="d-flex">
+                            <div (click)="catchData(user)">
+                                <mat-icon>edit</mat-icon>
+                            </div>
+                            <div (click)="eliminarUsuarios(user.id)">
+                                <mat-icon>delete</mat-icon>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        {{ user.nombre }}
+                    </td>
+                    <td>
+                        {{ user.edad }}
+                    </td>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                    <td>
+                        {{ user.telefono }}
+                    </td>
+                    <td>
+                        {{ user.cedula }}
+                    </td>
+                    <td>
+                        {{ user.direccion }}
+                    </td>
+                    <td>
+                        {{ user.password }}
+                    </td>
+                    <!-- <td>
+                        {{ user.estado }}
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

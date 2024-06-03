@@ -1,0 +1,191 @@
+<div class="spinner-overlay"  *ngIf="_show_spinner" >
+    <div class="spinner-container">
+      <span class="loader"></span>
+    </div>
+</div>
+
+<div class="module-work mb-2">
+
+    <div class="d-flex justify-content-end align-items-center " >
+        <span class="fs-6" >
+            <mat-icon>request_quote</mat-icon>
+        </span>
+        <span class="fs-6">
+            <strong> Crear cuenta por cobrar </strong> 
+        </span>
+    </div>
+    <hr>
+    <form [formGroup]="CuentasPorCobrarForm" class="mb-2" (ngSubmit)="onSubmit()"  >
+    
+        <div class="d-flex flex-column mt-2">
+            <label for="idcli">Usuario <span class="text-secondary">(cliente):</span></label>
+            <select class="form-control" formControlName="idcli" id="idcli" (change)="obtenerProductos(1)" >
+              <option *ngFor="let usuario of listaUsuarios" [value]="usuario.id">{{ usuario.nombre | uppercase }}</option>
+            </select>
+        </div>
+        <div class="d-flex flex-column mt-2">
+            <div class="d-flex flex-column">
+                <label for="idproducto">
+                    Producto adeudado
+                    <span class="text-secondary">:</span>
+                </label>
+                <select class="form-control"
+                        formControlName="idproducto"
+                        id="idproducto"
+                        (change)="obtenerValorProductos()">
+                  <option *ngFor="let prod of listaComras" 
+                           [value]="prod.id">
+                           {{ prod.nombreProducto | uppercase }}
+                  </option>
+                </select>
+            </div>
+            <div class="d-flex" >
+                <div class="rounded-2 p-1 d-flex justify-content-center m-1"
+                     style="border:  solid 1px gray;">
+                     <span> P.V.P. </span>
+                    <strong>
+                        $ {{ pvp | number : '1.2-2' }} </strong>
+                </div>
+                <div class="rounded-2 p-1 d-flex justify-content-center m-1"
+                     style="border:  solid 1px gray;">
+                     <span> P.V.T. </span>
+                    <strong> 
+                        $ {{ pvt | number : '1.2-2' }}
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column mt-2" >
+                <label for="avance">
+                    Avance:
+                </label>
+                <input type="number"
+                       min="0"
+                       (change)="calculoSaldo()"
+                       (keyup)="calculoSaldo()"
+                       style="width: 145px;"
+                       class="form-control"
+                       formControlName="avance"
+                       #avance
+                       id="avance"
+                       >
+            </div>
+            <div class="d-flex flex-column mt-2" >
+                <label for="saldo">
+                    Saldo:
+                </label>
+                <input type="number"  
+                       style="width: 145px;" 
+                       class="form-control"
+                       formControlName="saldo"
+                       #saldo
+                       id="saldo"
+                       >
+            </div>
+        </div>
+        <div class="d-flex flex-column mt-2" >
+            <label for="text">
+                Observación:
+            </label>
+            <textarea type="text" 
+                   class="form-control"
+                   formControlName="observacion"
+                   #observacion
+                   id="observacion"
+                   >
+            </textarea>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <button *ngIf="cancel_button" type="button" class="btn btn-danger mt-2" (click)="limpiar()" >
+                <mat-icon>cancel</mat-icon>
+            </button>
+            <button class="btn btn-warning w-75 d-flex align-items-center justify-content-center mt-2 "
+                    type="submit" >
+                    <mat-icon>
+                        {{icon_button}}
+                    </mat-icon>
+                    <span>
+                        {{ action_button }}
+                    </span>
+            </button>
+        </div>
+    </form>
+
+</div>
+
+<div class="module-work mb-2 d-flex justify-content-between " style="background-color: whitesmoke;" >
+    <div class="box-cal d-flex flex-column" >
+        <span>P.V.P.</span>
+        <span class="fs-5" > $ {{ pvptotal | number : '1.2-2' }} </span>
+    </div>
+    <div class="box-cal d-flex flex-column" >
+        <span> Abono </span>
+        <span class="fs-5" > $ {{ pvpabonototal | number : '1.2-2' }} </span>
+    </div>
+    <div class="box-cal d-flex flex-column" >
+        <span>Saldo</span>
+        <span class="fs-5" > $ {{ pvpsaldo | number : '1.2-2' }} </span>
+    </div>
+</div>
+
+<div class="module-work mb-2">
+    <div class="mb-2 d-flex w-50">
+        <input class=" w-100 shadow-sm form-control rounded-pill" 
+        fxFlex="auto" type="text"
+        [(ngModel)]="filterInitit"
+        (keyup)="filterHistory()" 
+        #input placeholder="Búsqueda ...">
+    </div>
+    <div class="table-responsive">
+    <table class="table table-bordered table-dark table-striped align-middle">
+        <thead class="bg-danger">
+            <th></th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Producto</th>
+            <th>Observacion</th>
+            <th>P.V.P.</th>
+            <th>Abono</th>
+            <th>Saldo</th>
+            <th>Estado</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cuentas of listaCuantasCobrar; let i = index;">
+                <td>
+                    <div (click)="eliminarCuentasCobrar( cuentas.id, i, cuentas.avance,  cuentas.precioacliente, cuentas.saldo )">
+                        <mat-icon>delete</mat-icon>
+                    </div>
+                    <div (click)="catchtData(cuentas)">
+                        <mat-icon>edit</mat-icon>
+                    </div>
+                </td>
+                <td>
+                    {{ cuentas.fecrea | date: 'dd-MM-yyyy' }}
+                </td>
+                <td>
+                    {{ cuentas.nombre }}
+                </td>
+                <td>
+                    {{ cuentas.nombreProducto }}
+                </td>
+                <td>
+                    {{ cuentas.observacion }}
+                </td>
+                <td>
+                    $ {{ cuentas.precioacliente | number : '1.2-2' }}
+                </td>
+                <td>
+                    $ {{ cuentas.avance | number : '1.2-2' }}
+                </td>
+                <td>
+                    $ {{ cuentas.saldo | number : '1.2-2' }}
+                </td>
+                <td>
+                    {{ cuentas.estadoPago }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>

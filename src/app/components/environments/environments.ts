@@ -10,11 +10,14 @@ export class Environments {
     constructor() { }
         
     // apingRok: any = 'http://181.188.224.4:5208';
-    apingRok: any = 'https://localhost:7073';
+    // apingRok: any = 'https://db45-51-77-121-0.ngrok-free.app';
+    apingRok: any = 'https://rpsoftdev.store';
+    // apingRok: any = 'http://51.77.121.0:81';
+    // apingRok: any = 'https://localhost:7073';
     // apingRok: any = 'https://sfiback.azurewebsites.net';
 
 
-    version: string = 'v.1.0.1';
+    version: string = 'v.1.2.0';
     es:      number = 5;
     hash:    number = 10;
     encode: number = 99

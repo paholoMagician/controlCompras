@@ -147,13 +147,23 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { FiltroBalanceComponent } from '../dashboard/filtro-balance/filtro-balance.component';
 import { LoginComponent } from '../dashboard/login/login.component';
 import { NavSideComponent } from 'src/app/shared/nav-side/nav-side.component';
+import { ClientesComponent } from '../dashboard/clientes/clientes.component';
+import { AppstoreComponent } from '../dashboard/appstore/appstore.component';
+import { HistorialComprasComponent } from '../dashboard/historial-compras/historial-compras.component';
+import { ModalImageComponent } from '../dashboard/historial-compras/modal-image/modal-image.component';
+import { CuentasPorCobrarComponent } from '../dashboard/cuentas-por-cobrar/cuentas-por-cobrar.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     FiltroBalanceComponent,
     LoginComponent,
-    NavSideComponent
+    NavSideComponent,
+    ClientesComponent,
+    AppstoreComponent,
+    HistorialComprasComponent,
+    ModalImageComponent,
+    CuentasPorCobrarComponent
   ],
   imports: [
     MatFormFieldModule,
@@ -194,7 +204,6 @@ import { NavSideComponent } from 'src/app/shared/nav-side/nav-side.component';
     AvatarModule,
     AvatarGroupModule,
     FormsModule,
-    HttpClientModule,
     ReactiveFormsModule,
     AccordionModule,
     AutoCompleteModule,
@@ -282,7 +291,12 @@ import { NavSideComponent } from 'src/app/shared/nav-side/nav-side.component';
   exports: [
     DashboardComponent,
     FiltroBalanceComponent,
-    NavSideComponent
+    NavSideComponent,
+    ClientesComponent,
+    AppstoreComponent,
+    HistorialComprasComponent,
+    CuentasPorCobrarComponent
   ]
 })
+
 export class ComponentsAppsModuModule { }
