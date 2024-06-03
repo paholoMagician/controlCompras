@@ -46,11 +46,11 @@ export class LoginComponent implements OnInit {
 
     this._show_spinner = true;
 
-    console.warn('/////////////////////////////////////');
-    console.warn('/////////////////////////////////////');
-    console.warn(this.loginForm.value);
-    console.warn('/////////////////////////////////////');
-    console.warn('/////////////////////////////////////');
+    // console.warn('/////////////////////////////////////');
+    // console.warn('/////////////////////////////////////');
+    // console.warn(this.loginForm.value);
+    // console.warn('/////////////////////////////////////');
+    // console.warn('/////////////////////////////////////');
 
     this.log.login( this.loginForm.value ).subscribe({
       next: (x:any) => {

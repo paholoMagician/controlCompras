@@ -10,7 +10,7 @@
     <app-nav-side (moduloEmit)="recibirModulos($event)" ></app-nav-side>
 </div>
 
-<section *ngIf="homework">
+<section *ngIf="homework"  >
     <div class="module-work">
         <div class="form-mod">
             <div class="d-flex justify-content-between align-items-center">
@@ -18,24 +18,24 @@
                 <div style="width: 18px; height: 18px; border-radius: 100%; background-color: blueviolet;" (click)="_formulario_on = !_formulario_on" ></div>
             </div>
             <hr>
-            <form [formGroup]="pedidosForm" class="mb-2" (ngSubmit)="onSubmit()" *ngIf="_formulario_on" >
-                <div class="d-flex flex-column mt-2">
-                    <label for="tienda">Nombre de aplicación de compras</label>
+            <form [formGroup]="pedidosForm" class="mb-2 d-flex justify-content-between flex-wrap w-100  " (ngSubmit)="onSubmit()" *ngIf="_formulario_on" >
+                <div class="cont-data d-flex flex-column m-2 col-4">
+                    <label for="tienda">Nombre de tienda:</label>
                     <select class="form-control" formControlName="tienda" id="tienda" (change)="validarEmpty()">
                       <option *ngFor="let tienda of listaAppStore" [value]="tienda.id">{{ tienda.nombreAppStore }}</option>
                     </select>
                 </div>
-                <div class="d-flex flex-column mt-2">
-                    <label for="usuario">Usuario <span class="text-secondary">(cliente):</span></label>
+                <div class="cont-data d-flex flex-column m-2 col-6">
+                    <label for="usuario">Usuario: <span class="text-secondary">(cliente):</span></label>
                     <select class="form-control" formControlName="usuario" id="usuario">
                       <option *ngFor="let usuario of listaUsuarios" [value]="usuario.id">{{ usuario.nombre | uppercase }}</option>
                     </select>
                 </div>
 
-                <div class="d-flex flex-column mt-2">
+                <div class="cont-data d-flex flex-column m-2 col-6">
                     <label for="productoScreen" class="d-flex align-items-center">
                         <mat-icon> photo_camera </mat-icon>
-                        <span> Screen del producto </span>
+                        <span> Screen del producto: </span>
                     </label>
                     <div>
                         <input type="file" (change)="onFileSelected($event)" #fileInput />
@@ -43,9 +43,9 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-column mt-2">
+                <div class="cont-data d-flex flex-column m-2 w-100">
                     <label for="">
-                        Producto
+                        Producto:
                     </label>
                     <input type="text"
                            class="form-control"
@@ -53,13 +53,12 @@
                            #producto
                            id="producto">
                 </div>
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex flex-column mt-2">
+                <div class="cont-data d-flex justify-content-between w-100">
+                    <div class="d-flex flex-column m-2 ">
                         <label for="" title="Precio de venta al público">
                             Precio público:
                         </label>
-                        <input type="number"
-                               style="width: 125px;"
+                        <input type="number"    
                                min="0"
                                (change)="calculoGanancia()"
                                formControlName="precio"
@@ -67,14 +66,13 @@
                                #precio
                                id="precio">
                     </div>
-                    <div class="d-flex flex-column mt-2" >
+                    <div class="d-flex flex-column m-2 " >
                         <label for="">
-                            Precio app Shein:
+                            Precio tienda:
                         </label>
                         <input type="number"
                                min="0"
                                (change)="calculoGanancia()"
-                               style="width: 125px;"
                                formControlName="precioShein"
                                class="form-control"
                                #precioShein

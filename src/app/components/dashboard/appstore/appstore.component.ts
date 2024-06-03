@@ -54,7 +54,7 @@ export class AppstoreComponent implements OnInit {
       usercrea:       this.xindex,
       feccrea:        new Date(),
       observacion:    this.appStoreForm.controls['observacion'].value,
-      estado: 1
+      estado:         1
     }
 
     if ( this.appStoreForm.controls['nombreAppStore'].value == null || this.appStoreForm.controls['nombreAppStore'].value == undefined || this.appStoreForm.controls['nombreAppStore'].value == '' || this.appStoreForm.controls['nombreAppStore'].value?.toString().length < 1  ) {
