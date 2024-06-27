@@ -5,6 +5,7 @@ import { Environments } from 'src/app/components/environments/environments';
 @Injectable({
   providedIn: 'root'
 })
+
 export class CuentasService {
 
   constructor( private http: HttpClient, private url: Environments) { }
