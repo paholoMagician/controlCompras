@@ -38,8 +38,9 @@
                         <span> Screen del producto: </span>
                     </label>
                     <div>
-                        <input type="file" (change)="onFileSelected($event)" #fileInput />
-                        <!-- <button (click)="uploadFile()">Subir archivo</button> -->
+                        <input type="file" (change)="onFileSelected($event); onImageSelected($event)" #fileInput />
+                        <canvas #imageCanvas></canvas>
+                        <p>{{ recognizedText }}</p>
                     </div>
                 </div>
 

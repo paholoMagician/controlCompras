@@ -6,6 +6,7 @@ import { AppStoreService } from './appstore/services/app-store.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { HttpEventType } from '@angular/common/http';
 import { Environments } from '../environments/environments';
+import { OcrService } from 'src/app/shared/services/OCR/ocr.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,13 +14,14 @@ import { Environments } from '../environments/environments';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
+  @ViewChild('imageCanvas', { static: false }) imageCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('fileInput') fileInput!: ElementRef;
   homework: boolean = true;
   viewcli: boolean = false;
   viewappstore: boolean = false;
   viewhistory: boolean = false;
   viewCuentasCobrar: boolean = false;
+  
 
   tiendas: any = [{
     id: 1,
@@ -58,6 +60,8 @@ export class DashboardComponent implements OnInit {
     filtro:        new FormControl('')
   })
 
+  recognizedText: string = '';
+
   xindex:any;
   ngOnInit(): void {
     this.xindex = sessionStorage.getItem('index');    
@@ -67,7 +71,7 @@ export class DashboardComponent implements OnInit {
     this.obtenerUsuarios();
   }
 
-  constructor( private log: UserService, private appstore: AppStoreService, private storageService: StorageService, private env: Environments) { }
+  constructor( private ocrService: OcrService, private log: UserService, private appstore: AppStoreService, private storageService: StorageService, private env: Environments) { }
 
   validarEmpty() {
     if( this.pedidosForm.controls['tienda'].value == undefined || this.pedidosForm.controls['tienda'].value == null || this.pedidosForm.controls['tienda'].value == '' ) {
@@ -88,6 +92,43 @@ export class DashboardComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.archivoSeleccionado = event.target.files[0];
+  }
+
+  async onImageSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const canvas = this.imageCanvas.nativeElement;
+      const context = canvas.getContext('2d');
+      const img = new Image();
+      img.onload = async () => {
+        // Obtener las dimensiones del canvas
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        // Calcular las proporciones de la imagen para ajustarse al canvas
+        const scale = Math.min(canvasWidth / img.width, canvasHeight / img.height);
+        const scaledWidth = img.width * scale;
+        const scaledHeight = img.height * scale;
+
+        // Limpiar el canvas y dibujar la imagen escalada
+        context?.clearRect(0, 0, canvasWidth, canvasHeight);
+        context?.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+        this.drawGreenBox(context, scaledWidth, scaledHeight);
+        this.recognizedText = 'Recognizing...';
+        this.recognizedText = await this.ocrService.recognizeImage(file);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+  }
+
+  drawGreenBox(context: CanvasRenderingContext2D | null, imgWidth: number, imgHeight: number) {
+    if (context) {
+      context.strokeStyle = 'green';
+      context.lineWidth = 2;
+      const boxHeight = imgHeight / 4; // Altura del cuadro en relación al tamaño de la imagen
+      const yOffset = imgHeight / 2; // Mover el cuadro un poco hacia abajo, aquí se mueve a la mitad de la altura
+      context.strokeRect(0, yOffset, imgWidth, boxHeight); // Coordenadas y tamaño del cuadro
+    }
   }
   
   calculoGanancia() {
