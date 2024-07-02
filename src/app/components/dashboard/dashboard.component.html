@@ -38,8 +38,13 @@
                         <span> Screen del producto: </span>
                     </label>
                     <div>
-                        <input type="file" (change)="onFileSelected($event); onImageSelected($event)" #fileInput />
-                        <canvas #imageCanvas></canvas>
+                        <!-- <input type="file" (change)="onFileSelected($event); onImageSelected($event)" #fileInput /> -->
+                        <input type="file" (change)="onFileSelected($event); onImageSelected($event)" #fileInput/>
+                        <div class="d-flex flex-column">
+                            <canvas #imageCanvas width="300"></canvas>
+                            <!-- style="display: none;" -->
+                            <canvas #croppedCanvas width="300"></canvas>
+                        </div>
                         <p>{{ recognizedText }}</p>
                     </div>
                 </div>

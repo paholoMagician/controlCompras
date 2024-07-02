@@ -15,6 +15,7 @@ import { OcrService } from 'src/app/shared/services/OCR/ocr.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('imageCanvas', { static: false }) imageCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('croppedCanvas', { static: false }) croppedCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('fileInput') fileInput!: ElementRef;
   homework: boolean = true;
   viewcli: boolean = false;
@@ -113,22 +114,38 @@ export class DashboardComponent implements OnInit {
         // Limpiar el canvas y dibujar la imagen escalada
         context?.clearRect(0, 0, canvasWidth, canvasHeight);
         context?.drawImage(img, 0, 0, scaledWidth, scaledHeight);
-        this.drawGreenBox(context, scaledWidth, scaledHeight);
-        this.recognizedText = 'Recognizing...';
-        this.recognizedText = await this.ocrService.recognizeImage(file);
+        const { x, y, width, height } = this.drawGreenBox(context, scaledWidth, scaledHeight);
+
+        // Recortar la región del cuadro verde
+        const croppedContext = this.croppedCanvas.nativeElement.getContext('2d');
+        this.croppedCanvas.nativeElement.width = width;
+        this.croppedCanvas.nativeElement.height = height;
+        croppedContext?.drawImage(canvas, x, y, width, height, 0, 0, width, height);
+
+        // Convertir el canvas recortado a blob y aplicar OCR
+        this.croppedCanvas.nativeElement.toBlob(async (blob: Blob | null) => {
+          if (blob) {
+            const croppedFile = new File([blob], 'cropped.png', { type: 'image/png' });
+            console.log(croppedFile)
+            this.recognizedText = 'Recognizing...';
+            this.recognizedText = await this.ocrService.recognizeImage(croppedFile);
+            console.log(croppedFile)
+          }
+        }, 'image/png');
       };
       img.src = URL.createObjectURL(file);
     }
   }
 
   drawGreenBox(context: CanvasRenderingContext2D | null, imgWidth: number, imgHeight: number) {
+    const boxHeight = imgHeight / 4; // Altura del cuadro en relación al tamaño de la imagen
+    const yOffset = 110; // Mover el cuadro un poco hacia abajo, aquí se mueve a la mitad de la altura
     if (context) {
       context.strokeStyle = 'green';
       context.lineWidth = 2;
-      const boxHeight = imgHeight / 4; // Altura del cuadro en relación al tamaño de la imagen
-      const yOffset = imgHeight / 2; // Mover el cuadro un poco hacia abajo, aquí se mueve a la mitad de la altura
       context.strokeRect(0, yOffset, imgWidth, boxHeight); // Coordenadas y tamaño del cuadro
     }
+    return { x: 0, y: yOffset, width: imgWidth, height: boxHeight }; // Devuelve las coordenadas y tamaño del cuadro
   }
   
   calculoGanancia() {
